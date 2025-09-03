@@ -21,10 +21,20 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # This is needed to be able to run ./gradlew below
-      # You can run `git update-index --chmod +x gradlew` then remove this step.
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
+
+      - name: Send notification to Discord
+        if: always() # Run even if the build fails
+        run: |
+          STATUS="✅ Build succeeded"
+          if [ "${{ job.status }}" != "success" ]; then
+            STATUS="❌ Build failed"
+          fi
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{\"content\": \"${STATUS} for **${{ github.repository }}** on commit [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\"}" \
+            ${{ secrets.DISCORD_WEBHOOK }}
