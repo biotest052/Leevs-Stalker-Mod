@@ -22,8 +22,19 @@ public class StalkerHandler {
     public void handlePlayerTickPost(PlayerTickEvent.Post event) {
     	Player player = event.getEntity();
         Level level = player.level();
+        
+        if (level == null) {
+        	LeevsStalkerMod.LOGGER.error("Level is null...");
+        	return;
+        }
+        
         ServerLevel serverLevel = (ServerLevel) level;
-
+        
+        if (serverLevel == null) {
+        	LeevsStalkerMod.LOGGER.error("Server Level is null...");
+        	return;
+        }
+        
         if (RANDOM.nextInt(SPAWN_CHANCE) == 0) {
             BlockPos spawnPos = player.blockPosition().offset(
                     RANDOM.nextInt(10) - 5,
