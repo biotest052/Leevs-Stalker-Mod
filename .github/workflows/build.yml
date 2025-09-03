@@ -6,6 +6,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Send start notification to Discord (embed)
+        run: |
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"🚀 Build Starting\",
+                \"description\": \"Build started for **${{ github.repository }}**\\nCommit: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\",
+                \"color\": 3447003
+              }]
+            }" \
+            ${{ secrets.DISCORD_WEBHOOK }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -21,10 +34,44 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # This is needed to be able to run ./gradlew below
-      # You can run `git update-index --chmod +x gradlew` then remove this step.
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: build/libs/*.jar
+
+      - name: Send result notification & upload file to Discord
+        if: always()
+        run: |
+          STATUS_TITLE="✅ Build Succeeded"
+          COLOR=3066993
+          if [ "${{ job.status }}" != "success" ]; then
+            STATUS_TITLE="❌ Build Failed"
+            COLOR=15158332
+          fi
+
+          # Send status embed
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"${STATUS_TITLE}\",
+                \"description\": \"Build finished for **${{ github.repository }}**\\nCommit: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\",
+                \"color\": ${COLOR}
+              }]
+            }" \
+            ${{ secrets.DISCORD_WEBHOOK }}
+
+          # Upload the JAR file (only if it exists and build succeeded)
+          if [ \"${{ job.status }}\" == \"success\" ]; then
+            for file in build/libs/*.jar; do
+              [ -e \"$file\" ] || continue
+              curl -F "file=@$file" ${{ secrets.DISCORD_WEBHOOK }}
+            done
+          fi
