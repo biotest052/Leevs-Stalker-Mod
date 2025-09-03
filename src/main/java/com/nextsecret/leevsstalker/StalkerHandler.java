@@ -17,7 +17,7 @@ public class StalkerHandler {
     private static final int SPAWN_CHANCE = 5000;
 
     @SubscribeEvent
-    public static void handlePlayerTickPost(PlayerTickEvent.Post event) {
+    public void handlePlayerTickPost(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         if (player.level().isClientSide()) return;
 
