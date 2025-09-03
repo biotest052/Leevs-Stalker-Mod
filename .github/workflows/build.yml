@@ -37,8 +37,10 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build with Gradle (capture log)
+        run: |
+          ./gradlew build | tee build.log
+        continue-on-error: true  # Don't fail job yet, capture log
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -46,7 +48,7 @@ jobs:
           name: build-files
           path: build/libs/*.jar
 
-      - name: Send result notification & upload file to Discord
+      - name: Send result notification & upload file/error to Discord
         if: always()
         run: |
           STATUS_TITLE="✅ Build Succeeded"
@@ -55,7 +57,8 @@ jobs:
             STATUS_TITLE="❌ Build Failed"
             COLOR=15158332
           fi
-          
+
+          # Send status embed
           curl -H "Content-Type: application/json" \
             -X POST \
             -d "{
@@ -66,7 +69,17 @@ jobs:
               }]
             }" \
             ${{ secrets.DISCORD_WEBHOOK }}
-      
+
+          # If build failed, upload the log
+          if [ "${{ job.status }}" != "success" ]; then
+            echo "Uploading build log to Discord..."
+            curl -X POST \
+              -F "payload_json={\"content\":\"🛑 Build failed! Here's the log:\"}" \
+              -F "file=@build.log" \
+              ${{ secrets.DISCORD_WEBHOOK }}
+          fi
+
+          # Upload JARs if success
           if [ "${{ job.status }}" == "success" ]; then
             for file in build/libs/*.jar; do
               [ -e "$file" ] || continue
