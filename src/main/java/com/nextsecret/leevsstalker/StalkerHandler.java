@@ -14,7 +14,6 @@ import java.util.Random;
 
 public class StalkerHandler {
     private static final Random RANDOM = new Random();
-    private static final int SPAWN_CHANCE = 5000;
 
     @SubscribeEvent
     public void handlePlayerTickPost(PlayerTickEvent.Post event) {
@@ -23,7 +22,9 @@ public class StalkerHandler {
 
         ServerLevel serverLevel = (ServerLevel) player.level();
 
-        if (RANDOM.nextInt(Config.STALKER_SPAWN_CHANCE.get()) == 0) {
+        Integer spawnChance = Config.STALKER_SPAWN_CHANCE.get();
+        
+        if (RANDOM.nextInt(Math.clamp(spawnChance, 0, spawnChance)) == 0) {
             BlockPos spawnPos = player.blockPosition().offset(
                     RANDOM.nextInt(10) - 5,
                     0,
