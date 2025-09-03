@@ -6,6 +6,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Get commit message
+        id: commit
+        run: echo "message=$(echo '${{ github.event.head_commit.message }}' | head -n 1)" >> $GITHUB_OUTPUT
+
       - name: Send start notification to Discord (embed)
         run: |
           curl -H "Content-Type: application/json" \
@@ -13,7 +17,7 @@ jobs:
             -d "{
               \"embeds\": [{
                 \"title\": \"🚀 Build Starting\",
-                \"description\": \"Build started for **${{ github.repository }}**\\nCommit: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\",
+                \"description\": \"**${{ github.repository }}**\\nCommit: [${{ steps.commit.outputs.message }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\",
                 \"color\": 3447003
               }]
             }" \
@@ -40,7 +44,7 @@ jobs:
       - name: Build with Gradle (capture log)
         run: |
           ./gradlew build | tee build.log
-        continue-on-error: true  # Don't fail job yet, capture log
+        continue-on-error: true
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -64,7 +68,7 @@ jobs:
             -d "{
               \"embeds\": [{
                 \"title\": \"${STATUS_TITLE}\",
-                \"description\": \"Build finished for **${{ github.repository }}**\\nCommit: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\",
+                \"description\": \"**${{ github.repository }}**\\nCommit: [${{ steps.commit.outputs.message }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\",
                 \"color\": ${COLOR}
               }]
             }" \
