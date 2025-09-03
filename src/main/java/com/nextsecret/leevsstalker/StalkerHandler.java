@@ -20,6 +20,25 @@ public class StalkerHandler {
 
     @SubscribeEvent
     public void handlePlayerTickPost(PlayerTickEvent.Post event) {
-        // after tick logic
+    	Player player = event.getEntity();
+        Level level = player.level();
+        ServerLevel serverLevel = (ServerLevel) level;
+
+        if (RANDOM.nextInt(SPAWN_CHANCE) == 0) {
+            BlockPos spawnPos = player.blockPosition().offset(
+                    RANDOM.nextInt(10) - 5,
+                    0,
+                    RANDOM.nextInt(10) - 5
+            );
+
+            PathfinderMob stalker = new PathfinderMob(EntityType.ZOMBIE, level) {}; 
+            stalker.setPos(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
+            serverLevel.addFreshEntity(stalker);
+
+            BlockState blockState = LeevsStalkerMod.EXAMPLE_BLOCK.get().defaultBlockState();
+            serverLevel.setBlock(spawnPos, blockState, 3);
+
+            LeevsStalkerMod.LOGGER.info("Stalker spawned at: {} {} {}", spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+        }
     }
 }
