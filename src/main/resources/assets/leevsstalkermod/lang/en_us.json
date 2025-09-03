@@ -1,0 +1,13 @@
+{
+  "itemGroup.leevsstalkermod": "Example Mod Tab",
+  "block.leevsstalkermod.example_block": "Example Block",
+  "item.leevsstalkermod.example_item": "Example Item",
+
+  "leevsstalkermod.configuration.title": "Leev's Stalker Mod Configs",
+  "leevsstalkermod.configuration.section.leevsstalkermod.common.toml": "Leev's Stalker Mod Configs",
+  "leevsstalkermod.configuration.section.leevsstalkermod.common.toml.title": "Leev's Stalker Mod Configs",
+  "leevsstalkermod.configuration.items": "Item List",
+  "leevsstalkermod.configuration.logDirtBlock": "Log Dirt Block",
+  "leevsstalkermod.configuration.magicNumberIntroduction": "Magic Number Text",
+  "leevsstalkermod.configuration.magicNumber": "Magic Number"
+}
