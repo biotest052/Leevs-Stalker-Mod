@@ -26,6 +26,10 @@ public class Config {
     public static final ModConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
             .comment("What you want the introduction message to be for the magic number")
             .define("magicNumberIntroduction", "The magic number is... ");
+    
+    public static final ModConfigSpec.ConfigValue<Integer> STALKER_SPAWN_CHANCE = BUILDER
+            .comment("The spawn chance of the 'Stalker' spawning infront of you.")
+            .define("stalkerSpawnChance", 5000);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
             .comment("A list of items to log on common setup.")

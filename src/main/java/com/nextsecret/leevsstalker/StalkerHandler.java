@@ -23,7 +23,7 @@ public class StalkerHandler {
 
         ServerLevel serverLevel = (ServerLevel) player.level();
 
-        if (RANDOM.nextInt(SPAWN_CHANCE) == 0) {
+        if (RANDOM.nextInt(Config.STALKER_SPAWN_CHANCE.get()) == 0) {
             BlockPos spawnPos = player.blockPosition().offset(
                     RANDOM.nextInt(10) - 5,
                     0,
