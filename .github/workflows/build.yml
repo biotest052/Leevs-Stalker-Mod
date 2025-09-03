@@ -55,8 +55,7 @@ jobs:
             STATUS_TITLE="❌ Build Failed"
             COLOR=15158332
           fi
-
-          # Send status embed
+          
           curl -H "Content-Type: application/json" \
             -X POST \
             -d "{
@@ -67,11 +66,14 @@ jobs:
               }]
             }" \
             ${{ secrets.DISCORD_WEBHOOK }}
-
-          # Upload the JAR file (only if it exists and build succeeded)
-          if [ \"${{ job.status }}\" == \"success\" ]; then
+      
+          if [ "${{ job.status }}" == "success" ]; then
             for file in build/libs/*.jar; do
-              [ -e \"$file\" ] || continue
-              curl -F "file=@$file" ${{ secrets.DISCORD_WEBHOOK }}
+              [ -e "$file" ] || continue
+              echo "Uploading $file to Discord..."
+              curl -X POST \
+                -F "payload_json={\"content\":\"📦 Built file: \`$(basename "$file")\`\"}" \
+                -F "file=@$file" \
+                ${{ secrets.DISCORD_WEBHOOK }}
             done
           fi
