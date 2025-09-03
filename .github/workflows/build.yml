@@ -6,11 +6,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Send start notification to Discord
+      - name: Send start notification to Discord (embed)
         run: |
           curl -H "Content-Type: application/json" \
             -X POST \
-            -d "{\"content\": \"Build starting for **${{ github.repository }}** on commit [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\"}" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"🚀 Build Starting\",
+                \"description\": \"Build started for **${{ github.repository }}**\\nCommit: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\",
+                \"color\": 3447003
+              }]
+            }" \
             ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Checkout repository
@@ -34,14 +40,38 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Send result notification to Discord
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: build/libs/*.jar
+
+      - name: Send result notification & upload file to Discord
         if: always()
         run: |
-          STATUS="✅ Build succeeded"
+          STATUS_TITLE="✅ Build Succeeded"
+          COLOR=3066993
           if [ "${{ job.status }}" != "success" ]; then
-            STATUS="❌ Build failed"
+            STATUS_TITLE="❌ Build Failed"
+            COLOR=15158332
           fi
+
+          # Send status embed
           curl -H "Content-Type: application/json" \
             -X POST \
-            -d "{\"content\": \"${STATUS} for **${{ github.repository }}** on commit [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\"}" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"${STATUS_TITLE}\",
+                \"description\": \"Build finished for **${{ github.repository }}**\\nCommit: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\",
+                \"color\": ${COLOR}
+              }]
+            }" \
             ${{ secrets.DISCORD_WEBHOOK }}
+
+          # Upload the JAR file (only if it exists and build succeeded)
+          if [ \"${{ job.status }}\" == \"success\" ]; then
+            for file in build/libs/*.jar; do
+              [ -e \"$file\" ] || continue
+              curl -F "file=@$file" ${{ secrets.DISCORD_WEBHOOK }}
+            done
+          fi
