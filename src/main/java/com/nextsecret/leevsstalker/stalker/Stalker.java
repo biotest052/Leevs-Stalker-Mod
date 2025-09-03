@@ -45,11 +45,6 @@ public class Stalker extends PathfinderMob {
 	}
 
 	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
-
-	@Override
 	public boolean isPersistenceRequired() {
 		return true;
 	}
