@@ -24,6 +24,12 @@ public class StalkerRenderer extends MobRenderer<StalkerEntity, StalkerModel<Sta
 	@Override
 	public void render(StalkerEntity entity, float entityYaw, float partialTicks, PoseStack poseStack,
 			MultiBufferSource buffer, int packedLight) {
-		super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+		 poseStack.pushPose();
+
+		 poseStack.scale(3.0F, 3.0F, 3.0F);
+
+		 super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+
+		 poseStack.popPose();
 	}
 }

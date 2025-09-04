@@ -39,7 +39,7 @@ public class StalkerModel<T extends Animal> extends EntityModel<T> {
             PartPose.offset(0.0F, 24.0F, 0.0F)
         );
 
-        return LayerDefinition.create(mesh, 32, 16);
+        return LayerDefinition.create(mesh, 32, 32);
     }
 
 
