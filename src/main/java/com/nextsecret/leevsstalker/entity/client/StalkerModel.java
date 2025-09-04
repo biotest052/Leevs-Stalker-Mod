@@ -33,8 +33,8 @@ public class StalkerModel<T extends Animal> extends EntityModel<T> {
             CubeListBuilder.create()
                 .mirror(false)
                 .texOffs(0, 0)
-                .addBox(-8.0F, -16.0F, 0.0F,
-                        16.0F, 16.0F, 0.0F,
+                .addBox(-16.0F, -32.0F, 0.0F,
+                        32.0F, 32.0F, 0.0F,
                         new CubeDeformation(0.0F)),
             PartPose.offset(0.0F, 24.0F, 0.0F)
         );
