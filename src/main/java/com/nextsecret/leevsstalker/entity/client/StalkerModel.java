@@ -20,7 +20,7 @@ import net.minecraft.world.entity.animal.Animal;
 public class StalkerModel<T extends Animal> extends EntityModel<T> {
 
     public static final ModelLayerLocation LAYER_LOCATION =
-            new ModelLayerLocation(new ResourceLocation(LeevsStalkerMod.MODID, "stalker"), "main");
+            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(LeevsStalkerMod.MODID, "stalker"), "main");
 
     private final ModelPart bb_main;
 
