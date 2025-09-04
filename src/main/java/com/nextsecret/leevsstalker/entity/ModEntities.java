@@ -20,7 +20,7 @@ public class ModEntities {
             ENTITY_TYPES.register("stalker",
                     () -> EntityType.Builder
                             .<StalkerEntity>of((type, world) -> new StalkerEntity(type, world), MobCategory.CREATURE)
-                            .sized(0.2f, 1f)
+                            .sized(1f, 3f)
                             .build("stalker"));
 
     public static void register(IEventBus eventBus) {
