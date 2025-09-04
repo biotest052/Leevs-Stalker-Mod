@@ -1,6 +1,10 @@
 package com.nextsecret.leevsstalker;
 
+import com.nextsecret.leevsstalker.entity.ModEntities;
+import com.nextsecret.leevsstalker.entity.client.StalkerRenderer;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -21,5 +25,8 @@ public class LeevsStalkerModClient {
     static void onClientSetup(FMLClientSetupEvent event) {
         LeevsStalkerMod.LOGGER.info("HELLO FROM CLIENT SETUP");
         LeevsStalkerMod.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+        
+        EntityRenderers.register(ModEntities.STALKER.get(),
+        	    context -> new StalkerRenderer(context, null, 0));
     }
 }

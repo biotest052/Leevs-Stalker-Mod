@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -33,7 +34,7 @@ public class Stalker extends PathfinderMob {
 	private int stareTicks = 0;
 	private static boolean despawnedThisNight = false;
 
-	public Stalker(EntityType<? extends PathfinderMob> type, Level level) {
+	public Stalker(EntityType<? extends Animal> type, Level level) {
 		super(type, level);
 	}
 

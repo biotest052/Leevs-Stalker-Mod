@@ -3,6 +3,7 @@ package com.nextsecret.leevsstalker;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
+import com.nextsecret.leevsstalker.entity.ModEntities;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -64,6 +65,8 @@ public class LeevsStalkerMod {
         modEventBus.addListener(this::addCreative);
         
         NeoForge.EVENT_BUS.register(new StalkerHandler());
+        
+        ModEntities.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
