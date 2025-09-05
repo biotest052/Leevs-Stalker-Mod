@@ -38,7 +38,7 @@ public class StalkerRenderer extends MobRenderer<StalkerEntity, StalkerModel<Sta
 
 	    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 
-	    float size = 0.5f;
+	    float size = 3f;
 	    poseStack.scale(size, size, size);
 
 	    Matrix4f matrix = poseStack.last().pose();
