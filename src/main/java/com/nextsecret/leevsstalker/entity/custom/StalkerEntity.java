@@ -134,13 +134,12 @@ public class StalkerEntity extends Animal {
 	        if (blockEntity instanceof net.minecraft.world.level.block.entity.SignBlockEntity signEntity) {
 	        	
 	        	signEntity.updateText(old -> {
-	                var newText = new net.minecraft.world.level.block.entity.SignText();
-	                newText.setMessage(0, net.minecraft.network.chat.Component.literal("I see you..."));
-	                newText.setMessage(1, net.minecraft.network.chat.Component.literal(""));
-	                newText.setMessage(2, net.minecraft.network.chat.Component.literal(""));
-	                newText.setMessage(3, net.minecraft.network.chat.Component.literal(""));
+	        		old.setMessage(0, net.minecraft.network.chat.Component.literal("I see you..."));
+	        		old.setMessage(1, net.minecraft.network.chat.Component.literal(""));
+	        		old.setMessage(2, net.minecraft.network.chat.Component.literal(""));
+	        		old.setMessage(3, net.minecraft.network.chat.Component.literal(""));
 
-	                return newText;
+	                return old;
 	            }, true);
 
 	            signEntity.setChanged();
