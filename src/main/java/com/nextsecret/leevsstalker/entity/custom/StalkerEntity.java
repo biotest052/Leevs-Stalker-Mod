@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.nextsecret.leevsstalker.entity.ModEntities;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -123,6 +124,24 @@ public class StalkerEntity extends Animal {
 	            1.0f,
 	            1.0f
 	        );
+	        
+	        BlockPos signPos = new BlockPos((int)getX(), (int)getY(), (int)getZ());
+	        
+	        var signState = net.minecraft.world.level.block.Blocks.OAK_SIGN.defaultBlockState();
+	        serverLevel.setBlock(signPos, signState, 3);
+	        
+	        var blockEntity = serverLevel.getBlockEntity(signPos, net.minecraft.world.level.block.entity.BlockEntityType.SIGN).orElse(null);
+	        if (blockEntity instanceof net.minecraft.world.level.block.entity.SignBlockEntity signEntity) {
+	        	 net.minecraft.world.level.block.entity.SignText text = new net.minecraft.world.level.block.entity.SignText();
+	        	 
+	        	 text.setMessage(0, net.minecraft.network.chat.Component.literal("I see you..."));
+	        	 text.setMessage(1, net.minecraft.network.chat.Component.literal(""));
+	        	 text.setMessage(2, net.minecraft.network.chat.Component.literal(""));
+	        	 text.setMessage(3, net.minecraft.network.chat.Component.literal(""));
+
+	        	 signEntity.setText(text, true);
+	             signEntity.setChanged();
+	        }
 
 	        this.discard();
 	    }

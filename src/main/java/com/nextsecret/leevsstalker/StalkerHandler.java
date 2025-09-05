@@ -36,10 +36,31 @@ public class StalkerHandler {
 
             StalkerEntity stalker = ModEntities.STALKER.get().create(serverLevel);
             if (stalker != null) {
-                stalker.moveTo(spawnPos.getX() + 0.5, spawnPos.getY() + 1, spawnPos.getZ() + 0.5, player.getYRot(), 0);
+
+                BlockPos safePos = spawnPos;
+                for (int i = 0; i < 5; i++) {
+                    if (serverLevel.isEmptyBlock(safePos) && serverLevel.isEmptyBlock(safePos.above())) {
+                        break;
+                    }
+                    
+                    safePos = spawnPos.offset(RANDOM.nextInt(5) - 2, 0, RANDOM.nextInt(5) - 2);
+                }
+
+                while (serverLevel.isEmptyBlock(safePos.below()) && safePos.getY() > 1) {
+                    safePos = safePos.below();
+                }
+
+                stalker.moveTo(
+                        safePos.getX() + 0.5,
+                        safePos.getY(),
+                        safePos.getZ() + 0.5,
+                        player.getYRot(),
+                        0
+                );
+
                 serverLevel.addFreshEntity(stalker);
             }
-
+            
             // BlockState blockState = LeevsStalkerMod.EXAMPLE_BLOCK.get().defaultBlockState();
             // serverLevel.setBlock(spawnPos, blockState, 3);
 
