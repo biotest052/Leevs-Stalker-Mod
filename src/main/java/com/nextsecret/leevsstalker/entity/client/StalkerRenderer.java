@@ -30,31 +30,30 @@ public class StalkerRenderer extends MobRenderer<StalkerEntity, StalkerModel<Sta
 	@Override
 	public void render(StalkerEntity entity, float entityYaw, float partialTicks,
 	                   PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-	    poseStack.pushPose();
+		poseStack.pushPose();
 
-	    poseStack.translate(0.0D, 0.5D, 0.0D);
+		float size = 3f;
 
-	    poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 
-	    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+		poseStack.scale(size, size, size);
 
-	    float size = 3f;
-	    poseStack.scale(size, size, size);
+		poseStack.translate(0.0D, 1.0D, 0.0D);
 
-	    Matrix4f matrix = poseStack.last().pose();
-	    VertexConsumer vc = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+		Matrix4f matrix = poseStack.last().pose();
+		VertexConsumer vc = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
 
-	    int argb = 0xFFFFFFFF;
-	    int overlay = OverlayTexture.NO_OVERLAY;
+		int blockLight = packedLight & 0xFFFF;
+		int skyLight   = (packedLight >> 16) & 0xFFFF;
+		int overlay    = OverlayTexture.NO_OVERLAY;
+		int argb       = 0xFFFFFFFF;
 
-	    int blockLight = packedLight & 0xFFFF;
-	    int skyLight   = (packedLight >> 16) & 0xFFFF;
-	    
-	    vc.addVertex(matrix, -1f, -1f, 0f).setColor(argb).setUv(0f, 1f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
-	    vc.addVertex(matrix, -1f,  1f, 0f).setColor(argb).setUv(0f, 0f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
-	    vc.addVertex(matrix,  1f,  1f, 0f).setColor(argb).setUv(1f, 0f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
-	    vc.addVertex(matrix,  1f, -1f, 0f).setColor(argb).setUv(1f, 1f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
+		vc.addVertex(matrix, -1f, -1f, 0f).setColor(argb).setUv(0f, 1f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
+		vc.addVertex(matrix, -1f,  1f, 0f).setColor(argb).setUv(0f, 0f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
+		vc.addVertex(matrix,  1f,  1f, 0f).setColor(argb).setUv(1f, 0f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
+		vc.addVertex(matrix,  1f, -1f, 0f).setColor(argb).setUv(1f, 1f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
 
-	    poseStack.popPose();
+		poseStack.popPose();
 	}
 }
