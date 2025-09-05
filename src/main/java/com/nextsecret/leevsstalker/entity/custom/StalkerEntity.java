@@ -1,6 +1,7 @@
 package com.nextsecret.leevsstalker.entity.custom;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -10,6 +11,7 @@ import com.nextsecret.leevsstalker.entity.ModEntities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.AgeableMob;
@@ -25,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.phys.Vec3;
 
 public class StalkerEntity extends Animal {
@@ -136,21 +139,18 @@ public class StalkerEntity extends Animal {
 	        	
 	        	LeevsStalkerMod.LOGGER.info("there is indeed a sign");
 	        	
-	        	signEntity.updateText(old -> {
-	        		old.setMessage(0, net.minecraft.network.chat.Component.literal("I see you..."));
-	        		old.setMessage(1, net.minecraft.network.chat.Component.literal(""));
-	        		old.setMessage(2, net.minecraft.network.chat.Component.literal(""));
-	        		old.setMessage(3, net.minecraft.network.chat.Component.literal(""));
-	        		
-	        		LeevsStalkerMod.LOGGER.info("updating text");
-
-	                return old;
-	            }, true);
+	        	String[] wrappedLines = wrapTextToSign("I see you...", 15);
 	        	
-	        	LeevsStalkerMod.LOGGER.info("sending block updated");
-
+	        	LeevsStalkerMod.LOGGER.info("updating text");
+	        	
+	        	signEntity.updateText(oldText -> {
+	        	    SignText newText = new SignText();
+	        	    for (int i = 0; i < wrappedLines.length && i < 4; i++) {
+	        	        newText = newText.setMessage(i, Component.literal(wrappedLines[i]));
+	        	    }
+	        	    return newText;
+	        	}, true);
 	            signEntity.setChanged();
-	            serverLevel.sendBlockUpdated(signPos, signState, signState, 3);
 	        }
 
 	        this.discard();
@@ -164,4 +164,22 @@ public class StalkerEntity extends Animal {
         double dot = playerLook.dot(toEntity);
         return dot > 0.95D;
     }
+	
+	private static String[] wrapTextToSign(String text, int maxLineLength) {
+	    List<String> lines = new ArrayList<>();
+	    String[] words = text.split(" ");
+	    StringBuilder currentLine = new StringBuilder();
+	    for (String word : words) {
+	      if (currentLine.length() > 0 && currentLine.length() + word.length() + 1 > maxLineLength) {
+	        lines.add(currentLine.toString());
+	        currentLine = new StringBuilder();
+	      } 
+	      if (currentLine.length() > 0)
+	        currentLine.append(" "); 
+	      currentLine.append(word);
+	    } 
+	    if (currentLine.length() > 0)
+	      lines.add(currentLine.toString()); 
+	    return lines.<String>toArray(new String[0]);
+	  }
 }
