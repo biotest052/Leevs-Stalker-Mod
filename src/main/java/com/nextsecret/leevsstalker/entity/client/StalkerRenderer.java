@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import com.nextsecret.leevsstalker.LeevsStalkerMod;
 import com.nextsecret.leevsstalker.entity.custom.StalkerEntity;
 
@@ -27,27 +28,33 @@ public class StalkerRenderer extends MobRenderer<StalkerEntity, StalkerModel<Sta
 	}
 	
 	@Override
-	public void render(StalkerEntity entity, float entityYaw, float partialTicks, PoseStack poseStack,
-			MultiBufferSource buffer, int packedLight) {
-		 poseStack.pushPose();
-		 
-		 poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+	public void render(StalkerEntity entity, float entityYaw, float partialTicks,
+	                   PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+	    poseStack.pushPose();
 
-		 poseStack.scale(3.0F, 3.0F, 3.0F);
-		 
-		 VertexConsumer vc = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-	     Matrix4f matrix = poseStack.last().pose();
-	     
-	     int argb = 0xFFFFFFFF;
-	     
-	     float u0 = 0f, v0 = 0f, u1 = 1f, v1 = 1f;
-	     float nx = 0f, ny = 0f, nz = 1f;
-	     
-	     vc.addVertex(-1f, -1f, 0f, argb, u0, v1, OverlayTexture.NO_OVERLAY, packedLight, nx, ny, nz);
-	     vc.addVertex(-1f,  1f, 0f, argb, u0, v0, OverlayTexture.NO_OVERLAY, packedLight, nx, ny, nz);
-	     vc.addVertex( 1f,  1f, 0f, argb, u1, v0, OverlayTexture.NO_OVERLAY, packedLight, nx, ny, nz);
-	     vc.addVertex( 1f, -1f, 0f, argb, u1, v1, OverlayTexture.NO_OVERLAY, packedLight, nx, ny, nz);
+	    poseStack.translate(0.0D, 0.5D, 0.0D);
 
-	     poseStack.popPose();
+	    poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+
+	    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+
+	    float size = 0.5f;
+	    poseStack.scale(size, size, size);
+
+	    Matrix4f matrix = poseStack.last().pose();
+	    VertexConsumer vc = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+
+	    int argb = 0xFFFFFFFF;
+	    int overlay = OverlayTexture.NO_OVERLAY;
+
+	    int blockLight = packedLight & 0xFFFF;
+	    int skyLight   = (packedLight >> 16) & 0xFFFF;
+	    
+	    vc.addVertex(matrix, -1f, -1f, 0f).setColor(argb).setUv(0f, 1f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
+	    vc.addVertex(matrix, -1f,  1f, 0f).setColor(argb).setUv(0f, 0f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
+	    vc.addVertex(matrix,  1f,  1f, 0f).setColor(argb).setUv(1f, 0f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
+	    vc.addVertex(matrix,  1f, -1f, 0f).setColor(argb).setUv(1f, 1f).setOverlay(overlay).setUv2(blockLight, skyLight).setNormal(0,0,1);
+
+	    poseStack.popPose();
 	}
 }
