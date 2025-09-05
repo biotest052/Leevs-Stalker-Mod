@@ -29,9 +29,9 @@ public class StalkerHandler {
         
         if (RANDOM.nextInt(Math.clamp(spawnChance, 0, spawnChance)) == 0) {
             BlockPos spawnPos = player.blockPosition().offset(
-                    RANDOM.nextInt(10) - 5,
+                    RANDOM.nextInt(50) - 25,
                     0,
-                    RANDOM.nextInt(10) - 5
+                    RANDOM.nextInt(50) - 25
             );
 
             StalkerEntity stalker = ModEntities.STALKER.get().create(serverLevel);
