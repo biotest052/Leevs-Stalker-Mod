@@ -12,6 +12,9 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.Random;
 
+import com.nextsecret.leevsstalker.entity.ModEntities;
+import com.nextsecret.leevsstalker.entity.custom.StalkerEntity;
+
 public class StalkerHandler {
     private static final Random RANDOM = new Random();
 
@@ -31,14 +34,14 @@ public class StalkerHandler {
                     RANDOM.nextInt(10) - 5
             );
 
-            Mob stalker = EntityType.ZOMBIE.create(serverLevel);
+            StalkerEntity stalker = ModEntities.STALKER.get().create(serverLevel);
             if (stalker != null) {
-                stalker.setPos(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
+                stalker.moveTo(spawnPos.getX() + 0.5, spawnPos.getY() + 1, spawnPos.getZ() + 0.5, player.getYRot(), 0);
                 serverLevel.addFreshEntity(stalker);
             }
 
-            BlockState blockState = LeevsStalkerMod.EXAMPLE_BLOCK.get().defaultBlockState();
-            serverLevel.setBlock(spawnPos, blockState, 3);
+            // BlockState blockState = LeevsStalkerMod.EXAMPLE_BLOCK.get().defaultBlockState();
+            // serverLevel.setBlock(spawnPos, blockState, 3);
 
             LeevsStalkerMod.LOGGER.info("Stalker spawned at: {} {} {}", spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
         }

@@ -32,7 +32,7 @@ public class StalkerRenderer extends MobRenderer<StalkerEntity, StalkerModel<Sta
 	                   PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
 		poseStack.pushPose();
 
-		float size = 3f;
+		float size = 2f;
 
 		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
