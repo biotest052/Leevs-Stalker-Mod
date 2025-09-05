@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.nextsecret.leevsstalker.LeevsStalkerMod;
 import com.nextsecret.leevsstalker.entity.ModEntities;
 
 import net.minecraft.core.BlockPos;
@@ -133,14 +134,20 @@ public class StalkerEntity extends Animal {
 	        var blockEntity = serverLevel.getBlockEntity(signPos, net.minecraft.world.level.block.entity.BlockEntityType.SIGN).orElse(null);
 	        if (blockEntity instanceof net.minecraft.world.level.block.entity.SignBlockEntity signEntity) {
 	        	
+	        	LeevsStalkerMod.LOGGER.info("there is indeed a sign");
+	        	
 	        	signEntity.updateText(old -> {
 	        		old.setMessage(0, net.minecraft.network.chat.Component.literal("I see you..."));
 	        		old.setMessage(1, net.minecraft.network.chat.Component.literal(""));
 	        		old.setMessage(2, net.minecraft.network.chat.Component.literal(""));
 	        		old.setMessage(3, net.minecraft.network.chat.Component.literal(""));
+	        		
+	        		LeevsStalkerMod.LOGGER.info("updating text");
 
 	                return old;
 	            }, true);
+	        	
+	        	LeevsStalkerMod.LOGGER.info("sending block updated");
 
 	            signEntity.setChanged();
 	            serverLevel.sendBlockUpdated(signPos, signState, signState, 3);
