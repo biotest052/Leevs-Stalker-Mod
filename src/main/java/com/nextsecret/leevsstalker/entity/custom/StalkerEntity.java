@@ -108,6 +108,18 @@ public class StalkerEntity extends Animal {
 	     }
 	}
 	
+	@Override
+	public void onAddedToLevel() {
+		super.onAddedToLevel();
+		
+		if (!level().isClientSide) {
+	        level().getServer().getPlayerList().broadcastSystemMessage(
+	            Component.literal("§5[Stalker] §rStalker has joined the game!"),
+	            false
+	        );
+	    }
+	}
+	
 	private void despawnWithEffect() {
 	    if (!level().isClientSide) {
 	        ServerLevel serverLevel = (ServerLevel) level();
@@ -152,6 +164,11 @@ public class StalkerEntity extends Animal {
 	        	}, true);
 	            signEntity.setChanged();
 	        }
+	        
+	        serverLevel.getServer().getPlayerList().broadcastSystemMessage(
+	                Component.literal("§5[Stalker] §rStalker has left the game!"),
+	                false
+	        );
 
 	        this.discard();
 	    }
