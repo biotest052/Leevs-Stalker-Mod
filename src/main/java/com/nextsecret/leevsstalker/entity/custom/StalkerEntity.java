@@ -114,7 +114,7 @@ public class StalkerEntity extends Animal {
 		
 		if (!level().isClientSide) {
 	        level().getServer().getPlayerList().broadcastSystemMessage(
-	            Component.literal("§5[Stalker] §rStalker has joined the game!"),
+	            Component.literal("§eStalker joined the game"),
 	            false
 	        );
 	    }
@@ -166,7 +166,7 @@ public class StalkerEntity extends Animal {
 	        }
 	        
 	        serverLevel.getServer().getPlayerList().broadcastSystemMessage(
-	                Component.literal("§5[Stalker] §rStalker has left the game!"),
+	                Component.literal("§eStalker left the game"),
 	                false
 	        );
 
