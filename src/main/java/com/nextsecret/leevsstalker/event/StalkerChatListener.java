@@ -11,7 +11,7 @@ import net.neoforged.neoforge.event.ServerChatEvent;
 public class StalkerChatListener 
 {
 	@SubscribeEvent
-    public void onPlayerChat(ServerChatEvent event) {
+    public static void onPlayerChat(ServerChatEvent event) {
 		String message = event.getRawText();
 	    var player = event.getPlayer();
 	    var level = player.level();
