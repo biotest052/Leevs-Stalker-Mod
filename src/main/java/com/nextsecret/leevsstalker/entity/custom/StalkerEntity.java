@@ -3,15 +3,21 @@ package com.nextsecret.leevsstalker.entity.custom;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
+import com.mojang.authlib.GameProfile;
 import com.nextsecret.leevsstalker.LeevsStalkerMod;
 import com.nextsecret.leevsstalker.entity.ModEntities;
 
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.AgeableMob;
@@ -32,6 +38,16 @@ import net.minecraft.world.phys.Vec3;
 
 public class StalkerEntity extends Animal {
 
+	private static class DelayedChat {
+	    int ticksRemaining;
+	    String message;
+
+	    DelayedChat(String message, int delayTicks) {
+	        this.message = message;
+	        this.ticksRemaining = delayTicks;
+	    }
+	}
+	
 	public double speedModifier = 1.0;
 	public float lookDistance = 100F;
 	
@@ -76,12 +92,98 @@ public class StalkerEntity extends Animal {
 		return ModEntities.STALKER.get().create(level);
 	}
 	
+	public void sendFakeChat(String message) {
+	    if (level().isClientSide) return;
+
+	    var server = level().getServer();
+	    var playerList = server.getPlayerList();
+
+	    GameProfile fakeProfile = new GameProfile(
+	        UUID.randomUUID(), 
+	        "Stalker"
+	    );
+
+	    PlayerChatMessage chat = PlayerChatMessage.unsigned(UUID.randomUUID(), message);
+
+	    playerList.broadcastChatMessage(chat, level().getServer().createCommandSourceStack(), ChatType.bind(ChatType.CHAT, this));
+	}
+	
+	private final List<DelayedChat> delayedChats = new ArrayList<>();
+	
+	public void sendFakeChatDelayed(String message, int delayTicks, double distance) {
+		if (level().isClientSide) return;
+		
+		delayedChats.add(new DelayedChat(message, delayTicks));
+		
+		if (message == "WHAT HAVE YOU DONE")
+		{
+			delayedChats.add(new DelayedChat("<EXIT GAME>", delayTicks + 3));
+		}
+	}
+	
+	private static final Random random = new Random();
+	
 	@Override
 	public void tick() {
 		super.tick();
 		
 		 if (!level().isClientSide) {
 	         lifetime++;
+	         
+	         Iterator<DelayedChat> iterator = delayedChats.iterator();
+	         while (iterator.hasNext()) {
+	             DelayedChat chat = iterator.next();
+	             chat.ticksRemaining--;
+	             if (chat.ticksRemaining <= 0) {
+	            	 if (chat.message == "<EXIT GAME>")
+	            	 {
+	            		 int tickThing = 0;
+	            		 while (true) {
+	            			 for (int i = 0; i < 10; i++) {
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+		            			 System.out.println("I SEE YOU.");
+	            			 }
+	            			 tickThing++;
+	            			 if (tickThing > 5) {
+	            				 break;
+	            			 }
+	            		 }
+	            		 Runtime.getRuntime().halt(0);
+	            	 }
+	            	 
+	                 sendFakeChat(chat.message);
+	                 iterator.remove();
+	             }
+	         }
+	         
+	         if (lifetime % 400 == 0) {
+	             String[] messages = {
+	                 "I see you...",
+	                 "Why are you running?",
+	                 "Don't look away.",
+	                 "You're being watched..."
+	             };
+
+	             String message = messages[random.nextInt(messages.length)];
+
+	             sendFakeChat(message);
+	         }
 
 	         if (lifetime >= 1200) {
 	        	 despawnWithEffect();
