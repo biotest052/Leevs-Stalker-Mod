@@ -98,14 +98,7 @@ public class StalkerEntity extends Animal {
 	    var server = level().getServer();
 	    var playerList = server.getPlayerList();
 
-	    GameProfile fakeProfile = new GameProfile(
-	        UUID.randomUUID(), 
-	        "Stalker"
-	    );
-
-	    PlayerChatMessage chat = PlayerChatMessage.unsigned(UUID.randomUUID(), message);
-
-	    playerList.broadcastChatMessage(chat, level().getServer().createCommandSourceStack(), ChatType.bind(ChatType.CHAT, this));
+	    playerList.broadcastSystemMessage(Component.literal("<Stalker> " + message), false);
 	}
 	
 	private final List<DelayedChat> delayedChats = new ArrayList<>();
@@ -115,9 +108,9 @@ public class StalkerEntity extends Animal {
 		
 		delayedChats.add(new DelayedChat(message, delayTicks));
 		
-		if (message == "WHAT HAVE YOU DONE")
+		if ("WHAT HAVE YOU DONE".equals(message))
 		{
-			delayedChats.add(new DelayedChat("<EXIT GAME>", delayTicks + 3));
+			delayedChats.add(new DelayedChat("EXIT GAME", delayTicks + 3));
 		}
 	}
 	
@@ -135,7 +128,7 @@ public class StalkerEntity extends Animal {
 	             DelayedChat chat = iterator.next();
 	             chat.ticksRemaining--;
 	             if (chat.ticksRemaining <= 0) {
-	            	 if (chat.message == "<EXIT GAME>")
+	            	 if (chat.message == "EXIT GAME")
 	            	 {
 	            		 int tickThing = 0;
 	            		 while (true) {

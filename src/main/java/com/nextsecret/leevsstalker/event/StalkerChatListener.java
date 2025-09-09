@@ -1,10 +1,13 @@
 package com.nextsecret.leevsstalker.event;
 
+import com.nextsecret.leevsstalker.LeevsStalkerMod;
 import com.nextsecret.leevsstalker.entity.custom.StalkerEntity;
 
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ServerChatEvent;
 
+@EventBusSubscriber(modid = LeevsStalkerMod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class StalkerChatListener 
 {
 	@SubscribeEvent
