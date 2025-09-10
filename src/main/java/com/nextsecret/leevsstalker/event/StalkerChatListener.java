@@ -67,6 +67,7 @@ public class StalkerChatListener
 		                stalker.sendFakeChatDelayed("§k§cWHY DID YOU SAY THIS", delayTicks + i + 2, distance);
 		                stalker.sendFakeChatDelayed("§k§cWHAT HAVE YOU DONE", delayTicks + i + 3, distance);
 	                }
+	                stalker.sendFakeChatDelayed("EXIT GAME", delayTicks + 9, distance);       
 	            }
 		    }
 	    }

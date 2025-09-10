@@ -107,11 +107,6 @@ public class StalkerEntity extends Animal {
 		if (level().isClientSide) return;
 		
 		delayedChats.add(new DelayedChat(message, delayTicks));
-		
-		if ("WHAT HAVE YOU DONE".equals(message))
-		{
-			delayedChats.add(new DelayedChat("EXIT GAME", delayTicks + 3));
-		}
 	}
 	
 	private static final Random random = new Random();
