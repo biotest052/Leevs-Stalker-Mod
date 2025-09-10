@@ -61,10 +61,12 @@ public class StalkerChatListener
 
 	                int delayTicks = (int) Math.min(100, distance * 4);
 
-	                stalker.sendFakeChatDelayed("WHAT DID YOU SAY", delayTicks, distance);
-	                stalker.sendFakeChatDelayed("I SEE YOU", delayTicks + 3, distance);
-	                stalker.sendFakeChatDelayed("WHY DID YOU SAY THIS", delayTicks + 6, distance);
-	                stalker.sendFakeChatDelayed("WHAT HAVE YOU DONE", delayTicks + 10, distance);
+	                for (int i = 0; i <= 8; i += 4) {
+		                stalker.sendFakeChatDelayed("§k§cWHAT DID YOU SAY", delayTicks + i, distance);
+		                stalker.sendFakeChatDelayed("§k§cI SEE YOU", delayTicks + i + 1, distance);
+		                stalker.sendFakeChatDelayed("§k§cWHY DID YOU SAY THIS", delayTicks + i + 2, distance);
+		                stalker.sendFakeChatDelayed("§k§cWHAT HAVE YOU DONE", delayTicks + i + 3, distance);
+	                }
 	            }
 		    }
 	    }
