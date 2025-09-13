@@ -29,7 +29,7 @@ public class Config {
     
     public static final ModConfigSpec.ConfigValue<Integer> STALKER_SPAWN_CHANCE = BUILDER
             .comment("The spawn chance of the 'Stalker' spawning infront of you.")
-            .define("stalkerSpawnChance", 5000);
+            .define("stalkerSpawnChance", 25000);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
             .comment("A list of items to log on common setup.")
