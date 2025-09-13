@@ -141,6 +141,7 @@ public class Stalker extends PathfinderMob {
 				this.mob.getNavigation().stop();
 			}
 		}
+		// 67
 
 		@Override
 		public void stop() {
