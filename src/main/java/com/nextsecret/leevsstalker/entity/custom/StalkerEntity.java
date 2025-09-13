@@ -165,7 +165,8 @@ public class StalkerEntity extends Animal {
 	                 "I see you...",
 	                 "Why are you running?",
 	                 "Don't look away.",
-	                 "You're being watched..."
+	                 "You're being watched...",
+					 "Leev used to be called....... Thing?"
 	             };
 
 	             String message = messages[random.nextInt(messages.length)];
