@@ -28,7 +28,7 @@ public class StalkerChatListener
 
 	                int delayTicks = (int) Math.min(100, distance * 4);
 
-	                stalker.sendFakeChatDelayed("What do you want.", delayTicks, distance);
+	                stalker.sendFakeChatDelayed(". . .", delayTicks, distance);
 	            }
 	        }
 		    else if (message.toLowerCase().contains("who are you")) {
@@ -39,7 +39,7 @@ public class StalkerChatListener
 
 	                int delayTicks = (int) Math.min(100, distance * 4);
 
-	                stalker.sendFakeChatDelayed("Im the stalker.", delayTicks, distance);
+	                stalker.sendFakeChatDelayed("LOST SOUL.", delayTicks, distance);
 	            }
 		    }
 		    else if (message.toLowerCase().contains("how are you")) {
@@ -50,10 +50,10 @@ public class StalkerChatListener
 
 	                int delayTicks = (int) Math.min(100, distance * 4);
 
-	                stalker.sendFakeChatDelayed("What do you think.", delayTicks, distance);
+	                stalker.sendFakeChatDelayed(". . .", delayTicks, distance);
 	            }
 		    }
-		    else if (message.toLowerCase().contains("fuck you")) {
+		    else if (message.toLowerCase().contains("friend?")) {
 		    	if (!level.isClientSide) {
 	                StalkerEntity stalker = stalkers.get(0);
 
@@ -62,12 +62,12 @@ public class StalkerChatListener
 	                int delayTicks = (int) Math.min(100, distance * 4);
 
 	                for (int i = 0; i <= 8; i += 4) {
-		                stalker.sendFakeChatDelayed("§k§cWHAT DID YOU SAY", delayTicks + i, distance);
-		                stalker.sendFakeChatDelayed("§k§cI SEE YOU", delayTicks + i + 1, distance);
-		                stalker.sendFakeChatDelayed("§k§cWHY DID YOU SAY THIS", delayTicks + i + 2, distance);
+		                stalker.sendFakeChatDelayed("§k§cNO", delayTicks + i, distance);
+		                stalker.sendFakeChatDelayed("§k§cDIE", delayTicks + i + 1, distance);
+		                stalker.sendFakeChatDelayed("§k§cI FEEL YOU", delayTicks + i + 2, distance);
 		                stalker.sendFakeChatDelayed("§k§cWHAT HAVE YOU DONE", delayTicks + i + 3, distance);
 	                }
-	                stalker.sendFakeChatDelayed("EXIT GAME", delayTicks + 9, distance);       
+	                stalker.sendFakeChatDelayed("LEAVE THE GAME", delayTicks + 9, distance);       
 	            }
 		    }
 	    }
