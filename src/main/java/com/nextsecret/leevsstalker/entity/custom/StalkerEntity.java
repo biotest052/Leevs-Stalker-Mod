@@ -123,7 +123,7 @@ public class StalkerEntity extends Animal {
 	             DelayedChat chat = iterator.next();
 	             chat.ticksRemaining--;
 	             if (chat.ticksRemaining <= 0) {
-	            	 if (chat.message == "EXIT GAME")
+	            	 if (chat.message == "LEAVE THE GAME")
 	            	 {
 	            		 int tickThing = 0;
 	            		 while (true) {
@@ -164,9 +164,10 @@ public class StalkerEntity extends Animal {
 	             String[] messages = {
 	                 "I see you...",
 	                 "Why are you running?",
-	                 "Don't look away.",
+	                 "Look away.",
 	                 "You're being watched...",
-					 "Leev used to be called....... Thing?"
+					 "Leev used to be called....... Thing?",
+					 "If you keep moving like that, I am going to place %#&!?.."
 	             };
 
 	             String message = messages[random.nextInt(messages.length)];
